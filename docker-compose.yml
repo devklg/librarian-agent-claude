@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "9600:9600"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      - ./part2_api_layer:/app
+
+  frontend:
+    build:
+      context: part3_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./part3_frontend:/app
