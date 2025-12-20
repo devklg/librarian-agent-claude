@@ -9,13 +9,20 @@ const agentService = {
   },
 
   async sendMessage(sessionId, message, onChunk) {
-    const response = await axios.post(
-      `${API_URL}/agent/chat/${sessionId}`,
-      { message },
-      { responseType: 'stream' }
-    )
+    // Use Fetch API for SSE streaming (axios doesn't support it properly in browsers)
+    const response = await fetch(`${API_URL}/agent/chat/${sessionId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message })
+    })
 
-    const reader = response.data.getReader()
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const reader = response.body.getReader()
     const decoder = new TextDecoder()
 
     try {
@@ -28,8 +35,15 @@ const agentService = {
         
         for (const line of lines) {
           if (line.startsWith('data: ')) {
-            const data = JSON.parse(line.slice(6))
-            if (data.content) onChunk(data.content)
+            try {
+              const data = JSON.parse(line.slice(6))
+              // Handle different event types
+              if (data.text) {
+                onChunk(data.text)
+              }
+            } catch (e) {
+              console.warn('Failed to parse SSE data:', line, e)
+            }
           }
         }
       }
