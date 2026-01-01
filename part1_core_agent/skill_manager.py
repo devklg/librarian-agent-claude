@@ -1,5 +1,5 @@
 """
-Skill Manager - Loads and manages skills from /mnt/skills
+Skill Manager - Loads and manages skills from local skills directory
 """
 
 import os
@@ -10,12 +10,16 @@ from pathlib import Path
 class SkillManager:
     """
     Manages the Skills Library:
-    - Loads skills from /mnt/skills
+    - Loads skills from local skills directory
     - Detects which skills are needed for a query
     - Indexes skills in Universal Memory Bridge
     """
-    
-    def __init__(self, skills_base_path: str = "/mnt/skills"):
+
+    def __init__(self, skills_base_path: str = None):
+        # Default to ./skills relative to this file's directory
+        if skills_base_path is None:
+            current_dir = Path(__file__).parent.parent
+            skills_base_path = str(current_dir / "skills")
         self.skills_base_path = skills_base_path
         self.skills_cache = {}
     
