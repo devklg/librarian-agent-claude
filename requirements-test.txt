@@ -1,0 +1,23 @@
+# Test dependencies for Librarian Agent
+
+# Testing framework
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# HTTP testing
+httpx>=0.25.0
+
+# Async testing
+anyio>=4.0.0
+
+# Code quality
+ruff>=0.1.0
+mypy>=1.7.0
+
+# Type stubs
+types-requests>=2.31.0
+
+# Coverage
+coverage[toml]>=7.3.0

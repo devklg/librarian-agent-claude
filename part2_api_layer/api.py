@@ -164,8 +164,7 @@ async def generate_sse_stream(session_id: str, message: str, agent_instance):
     try:
         if agent_instance:
             # Use real agent
-            response = await asyncio.to_thread(
-                agent_instance.chat,
+            response = await agent_instance.chat(
                 message=message,
                 session_id=session_id
             )
@@ -352,8 +351,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
                 # Process with agent
                 if agent:
                     try:
-                        response = await asyncio.to_thread(
-                            agent.chat,
+                        response = await agent.chat(
                             message=message,
                             session_id=session_id
                         )

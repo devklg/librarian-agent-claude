@@ -41,7 +41,13 @@ class LibrarianClaudeAgent:
         self.system_prompt = self._build_system_prompt()
         
         print(f"✅ Librarian Agent initialized with {len(self.skills)} skills")
-    
+
+    def start_conversation(self, session_id: str) -> None:
+        """Initialize a new conversation session"""
+        # Ensure session exists in conversation manager
+        if session_id not in self.conversation_manager.conversations:
+            self.conversation_manager.session_start_times[session_id] = time.time()
+
     def _build_system_prompt(self) -> str:
         """Build the system prompt with skill list"""
         
